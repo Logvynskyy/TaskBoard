@@ -1,11 +1,13 @@
 ﻿using TaskBoard.Core.Models;
 using TaskBoard.Services;
 using Microsoft.AspNetCore.Mvc;
+using TaskBoard.Filters;
 
 namespace TaskBoard.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[ServicesExceptionsFilterAttribute]
 public class BoardController : Controller
 {
     private readonly IBoardService _boardService;
@@ -22,7 +24,7 @@ public class BoardController : Controller
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetBoarById(int id)
+    public IActionResult GetBoardById(int id)
     {
         return Ok(_boardService.GetById(id));
     }

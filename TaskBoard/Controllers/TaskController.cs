@@ -1,11 +1,13 @@
 ﻿using TaskBoard.Core.Models;
 using TaskBoard.Services;
 using Microsoft.AspNetCore.Mvc;
+using TaskBoard.Filters;
 
 namespace CustomBoard.Controllers;
 
 [Route("api/")]
 [ApiController]
+[ServicesExceptionsFilter]
 public class TasksController : Controller
 {
     private readonly ITaskService _taskService;

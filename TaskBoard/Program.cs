@@ -1,4 +1,5 @@
 using TaskBoard.DataAccess;
+using TaskBoard.Filters;
 using TaskBoard.Services;
 
 namespace CustomBoard
@@ -19,6 +20,7 @@ namespace CustomBoard
             builder.Services.AddSingleton<IBoardService, BoardService>();
             builder.Services.AddSingleton<ITaskService, TaskService>();
             builder.Services.AddSingleton<ITaskRepository, ListTaskRepository>();
+            
 
             var app = builder.Build();
 
