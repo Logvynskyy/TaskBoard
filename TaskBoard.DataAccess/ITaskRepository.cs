@@ -1,4 +1,5 @@
-﻿using TaskBoard.Core.Models;
+﻿using TaskBoard.Core.Constants;
+using TaskBoard.Core.Models;
 
 namespace TaskBoard.DataAccess
 {
@@ -8,5 +9,6 @@ namespace TaskBoard.DataAccess
         List<ITask> GetAll();
         void Add(ITask task);
         void DeleteById(int id);
+        void ChangeTaskState(int id, TaskState taskState);
     }
 }

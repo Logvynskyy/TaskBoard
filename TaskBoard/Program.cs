@@ -11,8 +11,7 @@ namespace CustomBoard
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(option => option.Filters.Add<ServicesExceptionsFilterAttribute>());
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -20,7 +19,7 @@ namespace CustomBoard
             builder.Services.AddSingleton<IBoardService, BoardService>();
             builder.Services.AddSingleton<ITaskService, TaskService>();
             builder.Services.AddSingleton<ITaskRepository, ListTaskRepository>();
-            
+            //builder.Services.AddScoped<ServicesExceptionsFilterAttribute>();
 
             var app = builder.Build();
 

@@ -7,8 +7,7 @@ namespace TaskBoard.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[ServicesExceptionsFilterAttribute]
-public class BoardController : Controller
+public class BoardController : ControllerBase
 {
     private readonly IBoardService _boardService;
 

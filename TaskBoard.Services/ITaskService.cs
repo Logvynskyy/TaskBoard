@@ -1,4 +1,5 @@
-﻿using TaskBoard.Core.Models;
+﻿using TaskBoard.Core.Constants;
+using TaskBoard.Core.Models;
 
 namespace TaskBoard.Services
 {
@@ -11,5 +12,6 @@ namespace TaskBoard.Services
         void DeleteById(int id);
         List<Feature> GetFeatures();
         List<Bug> GetBugs();
+        void ChangeTaskState(int id, TaskState taskState);
     }
 }

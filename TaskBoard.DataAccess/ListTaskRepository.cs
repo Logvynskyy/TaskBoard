@@ -13,6 +13,11 @@ namespace TaskBoard.DataAccess
             _tasks.Add(task);
         }
 
+        public void ChangeTaskState(int id, TaskState taskState)
+        {
+            _tasks[id].TaskState = taskState;
+        }
+
         public void DeleteById(int id)
         {
             _tasks.RemoveAt(id);

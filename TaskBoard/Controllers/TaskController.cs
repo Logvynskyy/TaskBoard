@@ -2,12 +2,12 @@
 using TaskBoard.Services;
 using Microsoft.AspNetCore.Mvc;
 using TaskBoard.Filters;
+using TaskBoard.Core.Constants;
 
 namespace CustomBoard.Controllers;
 
 [Route("api/")]
 [ApiController]
-[ServicesExceptionsFilter]
 public class TasksController : Controller
 {
     private readonly ITaskService _taskService;
@@ -29,17 +29,26 @@ public class TasksController : Controller
     public IActionResult GetAllTasksOnBoard(int id)
     {
         if (!ValidateBoard(id))
-            return BadRequest();
+            return BadRequest("You entered invalid id of the board!");
         
         return Ok(_taskService.GetAllOnBoard(id));
+    }
+
+    [HttpGet("Board/{id}/[controller]/{taskId}")]
+    public IActionResult GetTaskById(int id, int taskId)
+    {
+        if (!ValidateBoard(id))
+            return BadRequest("You entered invalid id of the board!");
+
+        return Ok(_taskService.GetById(taskId));
     }
 
     [HttpGet("Board/{id}/[controller]/bugs")]
     public IActionResult GetBugs(int id)
     {
         if (!ValidateBoard(id))
-            return BadRequest();
-        
+            return BadRequest("You entered invalid id of the board!");
+
         return Ok(_taskService.GetBugs());
     }
 
@@ -47,7 +56,7 @@ public class TasksController : Controller
     public IActionResult GetFeatures(int id)
     {
         if (!ValidateBoard(id))
-            return BadRequest();
+            return BadRequest("You entered invalid id of the board!");
 
         return Ok(_taskService.GetFeatures());
     }
@@ -56,7 +65,8 @@ public class TasksController : Controller
     public IActionResult AddNewFeature([FromBody] Feature task, int id)
     {
         if (!ValidateBoard(id))
-            return BadRequest();
+            return BadRequest("You entered invalid id of the board!");
+        
         task.BoardId = id;
         _taskService.Add(task);
 
@@ -67,13 +77,34 @@ public class TasksController : Controller
     public IActionResult AddNewBug([FromBody] Bug task, int id)
     {
         if (!ValidateBoard(id))
-            return BadRequest();
+            return BadRequest("You entered invalid id of the board!");
+
         task.BoardId = id;
         _taskService.Add(task);
 
         return Created(new string("api/board/" + id + "/Tasks"), task);
     }
 
+    [HttpPatch("Board/{boardId}/[controller]/{taskId}/changestate")]
+    public IActionResult ChangeTaskState(int boardId, int taskId, [FromBody] TaskState taskState)
+    {
+        if (!ValidateBoard(boardId))
+            return BadRequest("You entered invalid id of the board!");
+
+        _taskService.ChangeTaskState(taskId, taskState);
+        return Ok(_taskService.GetById(taskId));
+    }
+
+    [HttpDelete("Board/{boardId}/[controller]/{taskId}/delete")]
+    public IActionResult DeleteBoard(int boardId, int taskId)
+    {
+        if (!ValidateBoard(boardId))
+            return BadRequest("You entered invalid id of the board!");
+
+        _taskService.DeleteById(taskId);
+
+        return Ok(_taskService.GetAllOnBoard(boardId));
+    }
 
     private bool ValidateBoard(int id)
     {

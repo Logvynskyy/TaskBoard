@@ -46,7 +46,7 @@ namespace TaskBoard.Services
         public List<ITask> GetAllOnBoard(int boardId)
         {
             if (boardId < 0 || boardId >= _boardService.GetAll().Count)
-                throw new InvalidOperationException("You passed invalid identificator of the task!");
+                throw new InvalidOperationException("You passed invalid identificator of the board!");
             return GetAll().Where(task => task.BoardId == boardId).ToList();
         }
 
@@ -70,6 +70,13 @@ namespace TaskBoard.Services
                     features.Add(feature);
             }
             return features;
+        }
+
+        public void ChangeTaskState(int id, TaskState taskState)
+        {
+            if(!ValidatePresenceofTheTask(id))
+                throw new InvalidOperationException("You passed invalid identificator of the task!");
+            _taskRepository.ChangeTaskState(id, taskState);
         }
 
         private bool ValidateTask(ITask task)

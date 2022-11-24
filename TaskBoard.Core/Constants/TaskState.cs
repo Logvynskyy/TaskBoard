@@ -3,5 +3,7 @@
 public enum TaskState
 {
     In_Dev,
-    Out_Dev
+    In_QA,
+    Tested,
+    Approved
 }

@@ -1,21 +1,20 @@
-﻿using System.Net;
-using System.Web.Http.Filters;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+
 
 namespace TaskBoard.Filters
 {
     public class ServicesExceptionsFilterAttribute : ExceptionFilterAttribute
     {
-        public override void OnException(HttpActionExecutedContext context)
+        public override void OnException(ExceptionContext context)
         {
-            if (context.Exception is Exception e)
-            {
-                context.Response = new HttpResponseMessage
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "You passed invalid data!",
-                    StatusCode = HttpStatusCode.BadRequest
-                };
-            }
+            context.Result = new BadRequestObjectResult(new { 
+                Error = context.Exception.Message,
+                Reason = "You passed wrong data!",
+                StatusCode = 400
+            });
+
+            context.ExceptionHandled = true;
         }
     }
 }
