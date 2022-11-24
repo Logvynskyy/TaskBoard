@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-
 namespace TaskBoard.Filters
 {
     public class ServicesExceptionsFilterAttribute : ExceptionFilterAttribute

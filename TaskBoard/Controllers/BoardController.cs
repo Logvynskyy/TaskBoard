@@ -1,7 +1,6 @@
 ﻿using TaskBoard.Core.Models;
 using TaskBoard.Services;
 using Microsoft.AspNetCore.Mvc;
-using TaskBoard.Filters;
 
 namespace TaskBoard.Controllers;
 
