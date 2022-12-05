@@ -1,6 +1,6 @@
 ﻿using TaskBoard.Core.Models;
-using TaskBoard.Services;
 using Microsoft.AspNetCore.Mvc;
+using TaskBoard.Services.Services;
 
 namespace TaskBoard.Controllers;
 

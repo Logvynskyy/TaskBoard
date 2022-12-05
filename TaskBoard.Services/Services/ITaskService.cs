@@ -1,7 +1,7 @@
 ﻿using TaskBoard.Core.Constants;
 using TaskBoard.Core.Models;
 
-namespace TaskBoard.Services
+namespace TaskBoard.Services.Services
 {
     public interface ITaskService
     {

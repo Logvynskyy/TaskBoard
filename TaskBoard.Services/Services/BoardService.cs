@@ -1,7 +1,7 @@
 ﻿using TaskBoard.Core.Models;
 using TaskBoard.DataAccess;
 
-namespace TaskBoard.Services
+namespace TaskBoard.Services.Services
 {
     public class BoardService : IBoardService
     {
@@ -9,7 +9,7 @@ namespace TaskBoard.Services
 
         public BoardService(IBoardRepository boardRepository)
         {
-            this._boardRepository = boardRepository;
+            _boardRepository = boardRepository;
         }
 
         public void Add(Board board)
@@ -23,7 +23,7 @@ namespace TaskBoard.Services
 
         public void Update(int id, string name)
         {
-            if(!ValidatePresenceofTheBoard(id))
+            if (!ValidatePresenceofTheBoard(id))
                 throw new InvalidOperationException("You passed invalid board!");
             if (string.IsNullOrWhiteSpace(name))
                 throw new InvalidOperationException("You must pass valid name!");
@@ -59,7 +59,7 @@ namespace TaskBoard.Services
         private static bool ValidateBoard(Board board)
         {
             if (board == null) return false;
-            if(board.Id < 0) return false;
+            if (board.Id < 0) return false;
             if (string.IsNullOrWhiteSpace(board.Name)) return false;
 
             return true;
@@ -67,8 +67,8 @@ namespace TaskBoard.Services
 
         private bool ValidatePresenceofTheBoard(Board board)
         {
-            if(!ValidateBoard(board)) return false;
-            
+            if (!ValidateBoard(board)) return false;
+
             return GetAll().Contains(board);
         }
 

@@ -1,6 +1,7 @@
 using TaskBoard.DataAccess;
 using TaskBoard.Filters;
-using TaskBoard.Services;
+using TaskBoard.Services.Services;
+using TaskBoard.Services.Validators;
 
 namespace CustomBoard
 {
@@ -19,7 +20,7 @@ namespace CustomBoard
             builder.Services.AddSingleton<IBoardService, BoardService>();
             builder.Services.AddSingleton<ITaskService, TaskService>();
             builder.Services.AddSingleton<ITaskRepository, ListTaskRepository>();
-            //builder.Services.AddScoped<ServicesExceptionsFilterAttribute>();
+            builder.Services.AddSingleton<IValidator, TaskValidators>();
 
             var app = builder.Build();
 
