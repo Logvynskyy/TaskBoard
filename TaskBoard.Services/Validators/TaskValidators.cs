@@ -1,26 +1,22 @@
 ﻿using TaskBoard.Core.Models;
-using TaskBoard.DataAccess;
 
 namespace TaskBoard.Services.Validators
 {
-    public class TaskValidators : IValidator
+    public class TaskValidators : IValidator<ITask>
     {
-        public readonly IEnumerable<IValidator> Validators;
-        private readonly ITaskRepository _taskRepository;
+        public readonly IEnumerable<IValidator<ITask>> Validators;
 
-        public TaskValidators(ITaskRepository taskRepository)
+        public TaskValidators()
         {
-            this._taskRepository = taskRepository;
-            Validators = new List<IValidator>()
+            Validators = new List<IValidator<ITask>>()
             {
-                new TaskValidator(_taskRepository),
-                new TaskPresenceValidator(_taskRepository)
+                new TaskValidator(),
             };
         }
 
-        public IEnumerable<bool> Validate(int taskId)
+        public IEnumerable<bool> Validate(ITask type)
         {
-            return Validators.SelectMany(validator => validator.Validate(taskId));
+            return Validators.SelectMany(validator => validator.Validate(type));
         }
     }
 }

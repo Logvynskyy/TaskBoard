@@ -4,7 +4,7 @@ namespace TaskBoard.Core.Models;
 
 public class Bug : ITask
 {
-    public int Id { get; init; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public TaskType TaskType { get; init; } = TaskType.Bug;
     public string Description { get; set; }

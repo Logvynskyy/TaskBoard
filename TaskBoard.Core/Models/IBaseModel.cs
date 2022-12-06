@@ -2,6 +2,6 @@
 
 public interface IBaseModel
 {
-    int Id { get; init; }
+    int Id { get; set; }
     string Name { get; set; }
 }

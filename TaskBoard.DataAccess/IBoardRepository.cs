@@ -9,6 +9,5 @@ namespace TaskBoard.DataAccess
         void Add(Board board);
         void Update(int id, string name);
         void DeleteById(int id);
-        void Delete(Board board);
     }
 }

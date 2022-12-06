@@ -3,7 +3,7 @@
 namespace TaskBoard.Core.Models;
 public class Feature : ITask
 {
-    public int Id { get; init; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public int BoardId { get; set; }
     public TaskType TaskType { get; init; } = TaskType.Feature;

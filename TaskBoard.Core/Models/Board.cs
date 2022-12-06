@@ -1,7 +1,7 @@
 ﻿namespace TaskBoard.Core.Models;
 public class Board : IBaseModel
 {
-    public int Id { get; init; }
+    public int Id { get; set; }
     public string Name { get; set; }
 
     public Board(int id, string name)

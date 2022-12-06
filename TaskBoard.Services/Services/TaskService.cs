@@ -9,9 +9,9 @@ namespace TaskBoard.Services.Services
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IBoardService _boardService;
-        private readonly IValidator _taskValidator;
+        private readonly IValidator<ITask> _taskValidator;
 
-        public TaskService(ITaskRepository taskRepository, IBoardService boardService, IValidator taskValidator)
+        public TaskService(ITaskRepository taskRepository, IBoardService boardService, IValidator<ITask> taskValidator)
         {
             _taskRepository = taskRepository;
             _boardService = boardService;
@@ -20,37 +20,65 @@ namespace TaskBoard.Services.Services
 
         public void Add(ITask task)
         {
-            if (!_taskValidator.Validate(task.Id).FirstOrDefault())
+            if (!_taskValidator.Validate(task).FirstOrDefault())
                 throw new InvalidOperationException("You passed invalid task!");
-            if (_taskValidator.Validate(task.Id).FirstOrDefault())
-                throw new InvalidOperationException("This task already exists");
+
             _taskRepository.Add(task);
         }
 
-        public void DeleteById(int id)
+        public bool DeleteById(int id)
         {
-            if (!_taskValidator.Validate(id).FirstOrDefault())
-                throw new InvalidOperationException("You passed invalid identificator of the task!");
-            _taskRepository.DeleteById(id);
+            try
+            {
+                _taskRepository.DeleteById(id);
+                return true;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
 
         public ITask GetById(int id)
         {
-            if (!_taskValidator.Validate(id).FirstOrDefault())
-                throw new InvalidOperationException("You passed invalid identificator of the task!");
-            return _taskRepository.GetById(id);
+            try
+            {
+                return _taskRepository.GetById(id);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
 
         public List<ITask> GetAll()
         {
-            return _taskRepository.GetAll();
+            try
+            {
+                return _taskRepository.GetAll();
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }  
         }
 
         public List<ITask> GetAllOnBoard(int boardId)
         {
             if (boardId < 0 || boardId >= _boardService.GetAll().Count)
                 throw new InvalidOperationException("You passed invalid identificator of the board!");
-            return GetAll().Where(task => task.BoardId == boardId).ToList();
+            try
+            {
+                return GetAll().Where(task => task.BoardId == boardId).ToList();
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
 
         public List<Bug> GetBugs()
@@ -75,11 +103,19 @@ namespace TaskBoard.Services.Services
             return features;
         }
 
-        public void ChangeTaskState(int id, TaskState taskState)
+        public bool ChangeTaskState(int id, TaskState taskState)
         {
-            if (!_taskValidator.Validate(id).FirstOrDefault())
-                throw new InvalidOperationException("You passed invalid identificator of the task!");
-            _taskRepository.ChangeTaskState(id, taskState);
+            try
+            {
+                _taskRepository.ChangeTaskState(id, taskState);
+                return true;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            
         }
     }
 }

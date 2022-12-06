@@ -9,9 +9,9 @@ namespace TaskBoard.Services.Services
         List<ITask> GetAll();
         List<ITask> GetAllOnBoard(int boardId);
         void Add(ITask task);
-        void DeleteById(int id);
+        bool DeleteById(int id);
         List<Feature> GetFeatures();
         List<Bug> GetBugs();
-        void ChangeTaskState(int id, TaskState taskState);
+        bool ChangeTaskState(int id, TaskState taskState);
     }
 }

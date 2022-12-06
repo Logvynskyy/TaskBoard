@@ -7,9 +7,11 @@ namespace TaskBoard.DataAccess
     {
         private readonly List<ITask> _tasks = new() { new Feature(0, "feature1", 0, "desc1", TaskState.In_Dev, "blaah"),
                                                         new Bug(1, "bug1", 0, "desc2", TaskState.In_Dev, 1)};
+        private int _taskId = 2;
 
         public void Add(ITask task)
         {
+            task.Id = _taskId++;
             _tasks.Add(task);
         }
 

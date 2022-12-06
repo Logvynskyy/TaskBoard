@@ -1,3 +1,4 @@
+using TaskBoard.Core.Models;
 using TaskBoard.DataAccess;
 using TaskBoard.Filters;
 using TaskBoard.Services.Services;
@@ -20,7 +21,8 @@ namespace CustomBoard
             builder.Services.AddSingleton<IBoardService, BoardService>();
             builder.Services.AddSingleton<ITaskService, TaskService>();
             builder.Services.AddSingleton<ITaskRepository, ListTaskRepository>();
-            builder.Services.AddSingleton<IValidator, TaskValidators>();
+            builder.Services.AddSingleton<IValidator<Board>, BoardValidator>();
+            builder.Services.AddSingleton<IValidator<ITask>, TaskValidators>();
 
             var app = builder.Build();
 

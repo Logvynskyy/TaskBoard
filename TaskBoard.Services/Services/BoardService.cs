@@ -1,80 +1,82 @@
 ﻿using TaskBoard.Core.Models;
 using TaskBoard.DataAccess;
+using TaskBoard.Services.Validators;
 
 namespace TaskBoard.Services.Services
 {
     public class BoardService : IBoardService
     {
         private readonly IBoardRepository _boardRepository;
+        private readonly IValidator<Board> _boardValidator;
 
-        public BoardService(IBoardRepository boardRepository)
+        public BoardService(IBoardRepository boardRepository, IValidator<Board> boardValidator)
         {
             _boardRepository = boardRepository;
+            _boardValidator = boardValidator;
         }
 
         public void Add(Board board)
         {
-            if (!ValidateBoard(board))
+            if (!_boardValidator.Validate(board).FirstOrDefault())
                 throw new InvalidOperationException("You passed invalid board!");
-            if (ValidatePresenceofTheBoard(board.Id))
-                throw new InvalidOperationException("This board already exists");
+                
             _boardRepository.Add(board);
         }
 
-        public void Update(int id, string name)
+        public bool Update(int id, string name)
         {
-            if (!ValidatePresenceofTheBoard(id))
-                throw new InvalidOperationException("You passed invalid board!");
             if (string.IsNullOrWhiteSpace(name))
                 throw new InvalidOperationException("You must pass valid name!");
-            _boardRepository.Update(id, name);
+            try
+            {
+                _boardRepository.Update(id, name);
+                return true;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
 
-        public void Delete(Board board)
+        public bool DeleteById(int id)
         {
-            if (!ValidatePresenceofTheBoard(board))
-                throw new InvalidOperationException("You passed invalid board!");
-            _boardRepository.Delete(board);
-        }
-
-        public void DeleteById(int id)
-        {
-            if (!ValidatePresenceofTheBoard(id))
-                throw new InvalidOperationException("You passed invalid identificator of the board!");
-            _boardRepository.DeleteById(id);
+            try
+            {
+                _boardRepository.DeleteById(id);
+                return true;
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
 
         public List<Board> GetAll()
         {
-            return _boardRepository.GetAll();
+            try
+            {
+                return _boardRepository.GetAll();
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
 
         public Board GetById(int id)
         {
-            if (!ValidatePresenceofTheBoard(id))
-                throw new InvalidOperationException("You passed invalid identificator of the board!");
-            return _boardRepository.GetById(id);
-        }
-
-        private static bool ValidateBoard(Board board)
-        {
-            if (board == null) return false;
-            if (board.Id < 0) return false;
-            if (string.IsNullOrWhiteSpace(board.Name)) return false;
-
-            return true;
-        }
-
-        private bool ValidatePresenceofTheBoard(Board board)
-        {
-            if (!ValidateBoard(board)) return false;
-
-            return GetAll().Contains(board);
-        }
-
-        public bool ValidatePresenceofTheBoard(int boardId)
-        {
-            return boardId >= 0 && boardId < GetAll().Count;
+            try
+            {
+                return _boardRepository.GetById(id);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
     }
 }

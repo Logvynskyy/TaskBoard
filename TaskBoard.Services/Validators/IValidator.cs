@@ -2,8 +2,8 @@
 
 namespace TaskBoard.Services.Validators
 {
-    public interface IValidator
+    public interface IValidator<T>
     {
-        IEnumerable<bool> Validate(int taskId);
+        IEnumerable<bool> Validate(T type);
     }
 }

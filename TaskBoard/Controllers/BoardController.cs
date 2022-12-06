@@ -18,12 +18,18 @@ public class BoardController : ControllerBase
     [HttpGet]
     public IActionResult Index()
     {
+        if (_boardService.GetAll() == null)
+            return NotFound("You don't have any boards! Please, create one");
+        
         return Ok(_boardService.GetAll());
     }
 
     [HttpGet("{id}")]
     public IActionResult GetBoardById(int id)
     {
+        if(_boardService.GetById(id) == null)
+            return NotFound("You entered wrong board ID!");
+
         return Ok(_boardService.GetById(id));
     }
 
@@ -38,6 +44,9 @@ public class BoardController : ControllerBase
     [HttpDelete("delete/{id}")]
     public IActionResult DeleteBoard(int id)
     {
+        if(!_boardService.DeleteById(id))
+            return NotFound("You entered wrong board ID!");
+
         _boardService.DeleteById(id);
 
         return Ok(_boardService.GetAll());
@@ -46,7 +55,11 @@ public class BoardController : ControllerBase
     [HttpPatch("edit/{id}")]
     public IActionResult UpdateBoardsName(int id, [FromBody] string name)
     {
+        if(!_boardService.Update(id, name))
+            return NotFound("You entered wrong board ID!");
+
         _boardService.Update(id, name);
+
         return Ok(_boardService.GetById(id));
     }
 }
