@@ -5,9 +5,10 @@ namespace TaskBoard.DataAccess
 {
     public class ListTaskRepository : ITaskRepository
     {
-        private readonly List<ITask> _tasks = new() { new Feature(0, "feature1", 0, "desc1", TaskState.In_Dev, "blaah"),
-                                                        new Bug(1, "bug1", 0, "desc2", TaskState.In_Dev, 1)};
-        private int _taskId = 2;
+        private readonly List<ITask> _tasks = new() {new GenericTask(0, "generic", 0, TaskType.Maintenance, "just a task", TaskState.Approved),
+                                                        new Feature(1, "feature1", 0, "desc1", TaskState.In_Dev, "blaah"),
+                                                        new Bug(2, "bug1", 0, "desc2", TaskState.In_Dev, 1)};
+        private int _taskId = 3;
 
         public void Add(ITask task)
         {
@@ -17,7 +18,8 @@ namespace TaskBoard.DataAccess
 
         public void ChangeTaskState(int id, TaskState taskState)
         {
-            _tasks[id].TaskState = taskState;
+            AbstractTask task = (AbstractTask) _tasks[id];
+            task.TaskState = taskState;
         }
 
         public void DeleteById(int id)

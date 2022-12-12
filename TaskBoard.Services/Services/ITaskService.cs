@@ -8,10 +8,8 @@ namespace TaskBoard.Services.Services
         ITask GetById(int id);
         List<ITask> GetAll();
         List<ITask> GetAllOnBoard(int boardId);
-        void Add(ITask task);
+        bool Add(ITask task);
         bool DeleteById(int id);
-        List<Feature> GetFeatures();
-        List<Bug> GetBugs();
         bool ChangeTaskState(int id, TaskState taskState);
     }
 }

@@ -2,6 +2,7 @@
 
 public enum TaskType
 {
+    Maintenance,
     Feature,
     Bug
 }

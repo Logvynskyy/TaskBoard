@@ -1,6 +1,5 @@
 ﻿using TaskBoard.Core.Constants;
 using TaskBoard.Core.Models;
-using TaskBoard.DataAccess;
 
 namespace TaskBoard.Services.Validators
 {
@@ -8,13 +7,15 @@ namespace TaskBoard.Services.Validators
     {
         public IEnumerable<bool> Validate(ITask task)
         {
-            if (task == null || task.Id < 0) yield return false;
-            if (string.IsNullOrWhiteSpace(task!.Name) || string.IsNullOrWhiteSpace(task.Description)) yield return false;
-            if (task.TaskType.Equals(TaskType.Feature))
-                if (string.IsNullOrWhiteSpace((task as Feature)!.ProgrammArea)) yield return false;
+            var taskToCheck = (AbstractTask) task;
 
-            if (task.TaskType.Equals(TaskType.Bug))
-                if ((task as Bug)!.Priority <= 0) yield return false;
+            if (taskToCheck == null || taskToCheck.Id < 0) yield return false;
+            if (string.IsNullOrWhiteSpace(taskToCheck!.Name) || string.IsNullOrWhiteSpace(taskToCheck.Description)) yield return false;
+            if (taskToCheck.TaskType.Equals(TaskType.Feature))
+                if (string.IsNullOrWhiteSpace((taskToCheck as Feature)!.ProgrammArea)) yield return false;
+
+            if (taskToCheck.TaskType.Equals(TaskType.Bug))
+                if ((taskToCheck as Bug)!.Priority <= 0) yield return false;
 
             yield return true;
         }

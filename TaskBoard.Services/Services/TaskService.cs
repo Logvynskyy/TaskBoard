@@ -18,12 +18,21 @@ namespace TaskBoard.Services.Services
             _taskValidator = taskValidator;
         }
 
-        public void Add(ITask task)
+        public bool Add(ITask task)
         {
-            if (!_taskValidator.Validate(task).FirstOrDefault())
-                throw new InvalidOperationException("You passed invalid task!");
-
-            _taskRepository.Add(task);
+            try
+            {
+                if (!_taskValidator.Validate(task).FirstOrDefault())
+                    throw new InvalidOperationException("You passed invalid task!");
+                
+                _taskRepository.Add(task);
+                return true;
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
 
         public bool DeleteById(int id)
@@ -68,39 +77,23 @@ namespace TaskBoard.Services.Services
 
         public List<ITask> GetAllOnBoard(int boardId)
         {
-            if (boardId < 0 || boardId >= _boardService.GetAll().Count)
-                throw new InvalidOperationException("You passed invalid identificator of the board!");
             try
             {
+                if (boardId < 0 || boardId >= _boardService.GetAll().Count)
+                    throw new InvalidOperationException("You passed invalid identificator of the board!");
+
                 return GetAll().Where(task => task.BoardId == boardId).ToList();
+            }
+            catch(InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
             catch (NullReferenceException e)
             {
                 Console.WriteLine(e.Message);
                 return null;
             }
-        }
-
-        public List<Bug> GetBugs()
-        {
-            var bugs = new List<Bug>();
-            foreach (ITask task in _taskRepository.GetAll())
-            {
-                if (task is Bug bug)
-                    bugs.Add(bug);
-            }
-            return bugs;
-        }
-
-        public List<Feature> GetFeatures()
-        {
-            var features = new List<Feature>();
-            foreach (ITask task in _taskRepository.GetAll())
-            {
-                if (task is Feature feature)
-                    features.Add(feature);
-            }
-            return features;
         }
 
         public bool ChangeTaskState(int id, TaskState taskState)
@@ -115,7 +108,6 @@ namespace TaskBoard.Services.Services
                 Console.WriteLine(e.Message);
                 return false;
             }
-            
         }
     }
 }

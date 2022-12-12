@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskBoard.Core.Constants;
 using TaskBoard.Services.Services;
+using TaskBoard.Core.Factory;
 
 namespace CustomBoard.Controllers;
 
@@ -43,32 +44,27 @@ public class TasksController : Controller
         return Ok(_taskService.GetById(taskId));
     }
 
-    [HttpGet("Board/{id}/[controller]/bugs")]
-    public IActionResult GetBugs(int id)
+    [HttpGet("Board/{id}/[controller]/types/{taskType}")]
+    public IActionResult GetTasksOfSpecificType(int id, TaskType taskType)
     {
-        return Ok(_taskService.GetBugs());
+        var taskFactory = TaskFactoryService.GetTaskFactoryService(taskType, _taskService);
+
+        if(taskFactory.GetAll().Where(t => t.BoardId == id).ToList().Count == 0)
+            return NotFound("You entered wrong board ID!");
+
+        return Ok(taskFactory.GetAll().Where(t => t.BoardId == id));
     }
 
-    [HttpGet("Board/{id}/[controller]/features")]
-    public IActionResult GetFeatures(int id)
-    {
-        return Ok(_taskService.GetFeatures());
-    }
-
-    [HttpPost("Board/{id}/[controller]/addFeature")]
-    public IActionResult AddNewFeature([FromBody] Feature task, int id)
+    [HttpPost("Board/{id}/[controller]/add/{taskType}")]
+    public IActionResult AddNewTask([FromBody] TaskDTO task, int id, TaskType taskType)
     {
         task.BoardId = id;
-        _taskService.Add(task);
+        task.TaskType = taskType;
 
-        return Created(new string("api/board/" + id + "/Tasks"), task);
-    }
+        var taskFactory = TaskFactoryService.GetTaskFactoryService(taskType, _taskService);
 
-    [HttpPost("Board/{id}/[controller]/addBug")]
-    public IActionResult AddNewBug([FromBody] Bug task, int id)
-    {
-        task.BoardId = id;
-        _taskService.Add(task);
+        if (!_taskService.Add(taskFactory.Create(task)))
+            return BadRequest("You passed invalid Task!");
 
         return Created(new string("api/board/" + id + "/Tasks"), task);
     }
