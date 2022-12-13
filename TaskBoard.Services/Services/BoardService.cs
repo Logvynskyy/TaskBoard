@@ -15,22 +15,38 @@ namespace TaskBoard.Services.Services
             _boardValidator = boardValidator;
         }
 
-        public void Add(Board board)
+        public bool Add(Board board)
         {
-            if (!_boardValidator.Validate(board).FirstOrDefault())
-                throw new InvalidOperationException("You passed invalid board!");
-                
-            _boardRepository.Add(board);
+            try
+            {
+                if (!_boardValidator.Validate(board).FirstOrDefault())
+                    throw new InvalidOperationException("You passed invalid board!");
+
+                _boardRepository.Add(board);
+                return true;
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
         }
 
         public bool Update(int id, string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new InvalidOperationException("You must pass valid name!");
             try
             {
+                if (string.IsNullOrWhiteSpace(name))
+                    throw new InvalidOperationException("You must pass valid name!");
+
                 _boardRepository.Update(id, name);
                 return true;
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
             }
             catch (ArgumentOutOfRangeException e)
             {
