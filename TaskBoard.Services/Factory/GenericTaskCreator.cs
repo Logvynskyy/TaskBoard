@@ -16,7 +16,6 @@ namespace TaskBoard.Services.Factory
             return new GenericTask(taskDTO.Id,
                                    taskDTO.Name,
                                    taskDTO.BoardId,
-                                   TaskType.Maintenance,
                                    taskDTO.Description,
                                    taskDTO.TaskState);
         }

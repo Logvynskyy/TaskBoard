@@ -21,7 +21,7 @@ namespace TaskBoard.UnitTests
         [Test]
         public void CheckPresence_BoardDoesntExist_Null()
         {
-            Assert.That(_boardService.GetById(-1), Is.Null, "When passing invalid Id works as expected");
+            Assert.That(_boardService.GetById(-1), Is.Null, "When passing invalid Id still works");
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace TaskBoard.UnitTests
         [TestCaseSource(nameof(BoardsToTest))]
         public void CheckEdition_IsNotValid_False(Board board)
         {
-            Assert.That(_boardService.Update(board.Id, board.Name), Is.False, $"{board.ToString} board is not considered valid");
+            Assert.That(_boardService.Update(board.Id, board.Name), Is.False, $"{board.ToString} board is considered valid");
         }
 
         static readonly Board[] BoardsToTest =

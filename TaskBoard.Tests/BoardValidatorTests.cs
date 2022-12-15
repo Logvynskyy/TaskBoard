@@ -21,8 +21,8 @@ namespace TaskBoard.UnitTests
         {
             Assert.Multiple(() =>
             {
-                Assert.That(_boardValidator.Validate(null).FirstOrDefault(), Is.False, $"{board.ToString} board is not considered valid");
-                Assert.That(_boardValidator.Validate(board).FirstOrDefault(), Is.False, $"{board.ToString} board is not considered valid");
+                Assert.That(_boardValidator.Validate(null).FirstOrDefault(), Is.False, $"{board.Name} board is considered valid");
+                Assert.That(_boardValidator.Validate(board).FirstOrDefault(), Is.False, $"{board.Name} board is considered valid");
             });
         }
 
