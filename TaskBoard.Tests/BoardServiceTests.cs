@@ -25,9 +25,9 @@ namespace TaskBoard.UnitTests
         }
 
         [Test]
-        public void CheckDeletion_ValidId_True()
+        public void CheckDeletion_InvalidId_False()
         {
-            Assert.That(_boardService.DeleteById(0), Is.False);
+            Assert.That(_boardService.DeleteById(-1), Is.False);
         }
 
         [TestCaseSource(nameof(BoardsToTest))]

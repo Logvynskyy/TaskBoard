@@ -13,12 +13,12 @@ namespace TaskBoard.UnitTests.Mocks
 
         public void ChangeTaskState(int id, TaskState taskState)
         {
-            throw new NotImplementedException();
+            throw new ArgumentOutOfRangeException();
         }
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            throw new ArgumentOutOfRangeException();
         }
 
         public List<ITask> GetAll()

@@ -1,8 +1,6 @@
-﻿using TaskBoard.Core.Models;
-using TaskBoard.DataAccess;
-using TaskBoard.Services.Services;
-using TaskBoard.Services.Validators;
+﻿using TaskBoard.Services.Services;
 using TaskBoard.UnitTests.Mocks;
+using TaskBoard.Core.Constants;
 
 namespace TaskBoard.UnitTests
 {
@@ -26,24 +24,25 @@ namespace TaskBoard.UnitTests
         [Test]
         public void GetOnBoard_InvalidBoardId_Null()
         {
-            Assert.That(_taskService.GetAllOnBoard(-1), Is.Null, "When passing invalid Id works as expected");
+            Assert.That(_taskService.GetAllOnBoard(-1), Is.Null, "When passing invalid Id does still work");
         }
 
         [Test]
         public void GetById_ValidId_ReturnsTask()
         {
-            Assert.That(_taskService.GetById(-1), Is.Null, "When passing invalid Id works as expected");
+            Assert.That(_taskService.GetById(-1), Is.Null, "When passing invalid Id still works");
         }
 
-
-
-
-
-        static readonly ITask[] TasksToTest =
+        [Test]
+        public void CheckEdition_IsNotValid_False()
         {
-            //new Board(-1, "fsf"),
-            //new Board(1, ""),
-            //new Board(1, "   ")
-        };
+            Assert.That(_taskService.ChangeTaskState(-1, TaskState.Approved), Is.False, $"Task state still was changed");
+        }
+
+        [Test]
+        public void CheckDeletion_InvalidId_False()
+        {
+            Assert.That(_taskService.DeleteById(-1), Is.False);
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace TaskBoard.UnitTests.Mocks
 
         public List<Board> GetAll()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Board GetById(int id)
